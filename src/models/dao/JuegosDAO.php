@@ -29,7 +29,7 @@ class JuegosDAO{
         }
     }
 
-    private function listarProductos(){
+    public function listarProductos(){
         $query= "SELECT * FROM Juegos";
         $stmt= $this->pdo->query($query);
         $listarJuegos= [];
@@ -51,6 +51,49 @@ class JuegosDAO{
         }
         // devolvemos una lista de objetos Juegos
         return $listarJuegos;
+    }
+
+    public function consultarJuego($id){
+        $query="SELECT * FROM Juegos WHERE id= :id";
+        // preparamos la sentencia pero no la ejecutamos
+        $stmt= $this->pdo->prepare($query);
+        // ejecutamos la sentencia, pero antes sustituimos :id por el $id. Esto es para evitar inyeccion de datos
+        $stmt->execute([':id'=>$id]);
+        
+        // almacenos el valor que obtenemos
+        $valor= $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if($valor){
+            $juego= new Juegos(
+                $valor['id'],
+                $valor['nombre'],
+                $valor['costo'],
+                $valor['creador']
+            );
+
+            return $juego;
+        }
+
+        // si en caso no encuentr nada
+        return null;
+    }
+
+    public function nuevoJuego($nombre, $costo, $creador){
+        try{
+            $query= "INSERT INTO Juegos(id, nombre, costo, creador) values (:id, :nombre, :costo, :creador)";
+            $id= $this->generarId();
+            $stmt= $this->pdo->prepare($query);
+            $stmt->execute([
+                ':id' => $id,
+                ':nombre' => $nombre,
+                ':costo' => $costo,
+                ':creador' => $creador
+            ]);
+            return true;
+        }catch (PDOException $pdo_error){
+            error_log("Oh no ocurrio un error ".$pdo_error->getMessage());
+            return false; 
+        }
     }
 }
 

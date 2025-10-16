@@ -25,7 +25,7 @@ class CategoriaDAO{
         }
     }
 
-    private function listarCategorias(){
+    public function listarCategorias(){
         $query= "SELECT * FROM Categoria";
         $stmt= $this->pdo->query($query);
         $listaCategorias= [];
@@ -41,6 +41,39 @@ class CategoriaDAO{
         return $listaCategorias;
     }
 
+    public function consultarCategoria($id){
+        $query= "SELECT * FROM Categoria WHERE id= :id";
+        $stmt= $this->pdo->prepare($query);
+        $stmt->execute([':id' => $id]);
+        $valor= $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if($valor){
+            $categoria= new Categoria(
+                $valor['id'],
+                $valor['nombre']
+            );
+
+            return $categoria;
+        }
+
+        return null;
+    }
+
+    public function nuevaCategoria($nombre){
+        try{
+            $query= "INSERT INTO Categoria(id, nombre) VALUES (:id, :nombre)";
+            $id= $this->generarId();
+            $stmt= $this->pdo->prepare($query);
+            $stmt->execute([
+                ':id'=>$id,
+                ':nombre'=>$nombre
+            ]);
+            return true;
+        }catch(PDOException $pdo_error){
+            error_log("Oh no ocurrio un error ".$pdo_error->getMessage());
+            return false;
+        }
+    }
 }
 
 ?>
