@@ -23,13 +23,13 @@ class JuegosDAO{
             $ultimo= (int)substr($valor,1);
             $ultimo++;
             // retornamos
-            return "J".str_pad((string)$ultimo,3,0,STR_PAD_LEFT);
+            return "J".str_pad((string)$ultimo,3,"0",STR_PAD_LEFT);
         }else{
             return 'J001';
         }
     }
 
-    public function listarProductos(){
+    public function listarJuegos(){
         $query= "SELECT * FROM Juegos";
         $stmt= $this->pdo->query($query);
         $listarJuegos= [];
@@ -74,7 +74,7 @@ class JuegosDAO{
             return $juego;
         }
 
-        // si en caso no encuentr nada
+        // si en caso no encuentra nada
         return null;
     }
 
@@ -91,8 +91,38 @@ class JuegosDAO{
             ]);
             return true;
         }catch (PDOException $pdo_error){
-            error_log("Oh no ocurrio un error ".$pdo_error->getMessage());
+            error_log("Oh no ocurrio un error al crear un nuevo juego ".$pdo_error->getMessage());
             return false; 
+        }
+    }
+
+    public function actualizarJuego(Juegos $juego){
+        try{
+            $query= "UPDATE Juegos SET nombre= :nombre, costo= :costo WHERE id= :id";
+            $stmt= $this->pdo->prepare($query);
+            $stmt->execute([
+                ':id'=>$juego->getId(),
+                ':nombre'=>$juego->getNombre(),
+                ':costo'=>$juego->getCosto()
+            ]);
+            return $stmt->rowCount() > 0;
+        }catch(PDOException $pdo_error){
+            error_log("Oh no ocurrio un error al actualizar el juego ".$pdo_error->getMessage());
+            return false;
+        }
+    }
+
+    public function eliminarJuego($id){
+        try{
+            $query= "DELETE FROM Juegos WHERE id=:id";
+            $stmt=$this->pdo->prepare($query);
+            $stmt->execute([
+                ':id'=>$id
+            ]);
+            return $stmt->rowCount() > 0;
+        }catch(PDOException $pdo_error){
+            error_log("Oh no ocurrio un error al eliminar un registro ".$pdo_error->getMessage());
+            return false;
         }
     }
 }

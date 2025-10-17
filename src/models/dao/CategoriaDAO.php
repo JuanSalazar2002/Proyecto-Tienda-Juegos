@@ -19,7 +19,7 @@ class CategoriaDAO{
         if($valor){
             $ultimo= (int)substr($valor, 1);
             $ultimo++;
-            return "C".str_pad((string)$ultimo,3,STR_PAD_LEFT);
+            return "C".str_pad((string)$ultimo,3, "0",STR_PAD_LEFT);
         }else{
             return "C001";
         }
@@ -71,6 +71,35 @@ class CategoriaDAO{
             return true;
         }catch(PDOException $pdo_error){
             error_log("Oh no ocurrio un error ".$pdo_error->getMessage());
+            return false;
+        }
+    }
+
+    public function actualizarCategoria(Categoria $categoria){
+        try{
+            $query= "UPDATE Categoria SET nombre= :nombre WHERE id= :id";
+            $stmt=$this->pdo->prepare($query);
+            $stmt->execute([
+                ':id'=>$categoria->getId(),
+                ':nombre'=>$categoria->getNombre()
+            ]);
+            return $stmt->rowCount() > 0;
+        }catch(PDOException $pdo_error){
+            error_log("Oh no ocrrurio un error al actualizar una categoria ".$pdo_error->getMessage());
+            return false;
+        }
+    }
+
+    public function eliminarCategoria($id){
+        try{
+            $query= "DELETE FROM Categoria WHERE id= :id";
+            $stmt=$this->pdo->prepare($query);
+            $stmt->execute([
+                ':id'=>$id
+            ]);
+            return $stmt->rowCount() > 0;
+        }catch(PDOException $pdo_error){
+            error_log("Oh no ocurrio un error al eliminar una categoria ".$pdo_error->getMessage());
             return false;
         }
     }
