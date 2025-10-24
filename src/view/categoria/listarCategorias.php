@@ -6,25 +6,15 @@ $categ = new CategoriaController();
 $list_categ = $categ->listarCategorias();
 
 ?>
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Listar Categorias</title>
-</head>
+<?php include_once __DIR__ . '/../partes/cabecera.php' ?>
 
-<body>
+<?php foreach ($list_categ as $categoria) { ?>
+    <tr>
+        <td><?php echo $categoria->getId(); ?></td>
+        <td><?php echo $categoria->getNombre(); ?></td>
+    </tr>
+    <br>
+<?php } ?>
 
-    <?php foreach ($list_categ as $categoria) { ?>
-        <tr>
-            <td><?php echo $categoria->getId(); ?></td>
-            <td><?php echo $categoria->getNombre(); ?></td>
-        </tr>
-        <br>
-    <?php } ?>
-
-</body>
-
-</html>
+<?php include_once __DIR__ . '/../partes/footer.php' ?>
