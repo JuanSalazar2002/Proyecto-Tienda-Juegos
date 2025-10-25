@@ -29,6 +29,10 @@ class CategoriaController{
         }
     }
 
+    public function actualizarCategoria(Categoria $categoria){
+
+    }
+
     public function senialVida(){
         return "hola si funciona";
     }
