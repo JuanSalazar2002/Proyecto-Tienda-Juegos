@@ -11,14 +11,6 @@ if ($_POST['nombreCategoria']) {
 
 <?php include_once __DIR__ . '/../partes/cabecera.php' ?>
 
-<!-- <form action="" method="post">
-    Nombre:
-    <br>
-    <input type="text" name="nombreCategoria" placeholder="Ingrese aqui el nombre de la categoria" required>
-    <br>
-    <input type="submit" value="Registrar Categoria">
-</form> -->
-
 <form action="" method="post">
     <div class="flex items-center justify-center p-12">
         <div class="mx-auto w-full max-w-[550px] bg-white">

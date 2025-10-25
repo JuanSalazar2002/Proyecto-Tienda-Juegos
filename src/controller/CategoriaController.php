@@ -30,11 +30,23 @@ class CategoriaController{
     }
 
     public function actualizarCategoria(Categoria $categoria){
-
+        try{
+            $actualizacionCategoria= $this->categoriaDAO->actualizarCategoria($categoria);
+            return $actualizacionCategoria;
+        }catch(PDOException $pdo_error){
+            error_log("[actualizarCategoria] Error en la actualización ".$pdo_error->getMessage());
+            return null;
+        }
     }
 
-    public function senialVida(){
-        return "hola si funciona";
+    public function eliminarCategoria($id){
+        try{
+            $categoriaEliminar= $this->categoriaDAO->eliminarCategoria($id);
+            return $categoriaEliminar;
+        }catch(PDOException $pdo_error){
+            error_log("[eliminarCategoria] Error en la eliminacion de la categoria ".$pdo_error->getMessage());
+            return false;
+        }
     }
 }
 
