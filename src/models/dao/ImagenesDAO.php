@@ -1,7 +1,7 @@
 <?php
 
-require_once 'config/database.php';
-require_once __DIR__.'/../entities/Imagenes.php';
+require_once __DIR__ . '/../../../config/database.php';
+require_once __DIR__ .'/../entities/Imagenes.php';
 
 class ImagenesDAO{
     private $pdo;

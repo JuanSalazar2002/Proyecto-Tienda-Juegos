@@ -1,6 +1,6 @@
 <?php
 
-require_once 'config/database.php';
+require_once __DIR__ . '/../../../config/database.php';
 require_once __DIR__ . '/../entities/Juegos.php';
 
 class Juegos_categoriaDAO{
@@ -17,6 +17,7 @@ class Juegos_categoriaDAO{
         // si se eligieron solamente 2 categorias, la query se tendrá que ejecutar 2 veces.
         // Para el foreach se ejecuta la query en donde el $id_juego siempre será el mismo, lo único que variará sera el $id_categoria.
         try{
+            $this->pdo->beginTransaction();
             $query="INSERT INTO Juegos_categoria(id_juego, id_categoria) VALUES (:id_juego, :id_categoria)";
             $stmt= $this->pdo->prepare($query);
             foreach($array_categorias as $id_categoria){
@@ -25,8 +26,10 @@ class Juegos_categoriaDAO{
                     ':id_categoria'=>$id_categoria
                 ]);
             }
+            $this->pdo->commit();
             return true;
         }catch(PDOException $pdo_error){
+            $this->pdo->rollBack();
             error_log("Error en la inserccion de datos ".$pdo_error->getMessage());
             return false;
         }

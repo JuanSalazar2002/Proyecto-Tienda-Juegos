@@ -1,6 +1,6 @@
 <?php
 
-require_once 'config/database.php';
+require_once __DIR__ . '/../../../config/database.php';
 require_once __DIR__ . '/../entities/Juegos.php';
 
 class JuegosDAO{
@@ -89,7 +89,8 @@ class JuegosDAO{
                 ':costo' => $costo,
                 ':creador' => $creador
             ]);
-            return true;
+            // return true;
+            return $id; // necesito el id no el true
         }catch (PDOException $pdo_error){
             error_log("Oh no ocurrio un error al crear un nuevo juego ".$pdo_error->getMessage());
             return false; 
